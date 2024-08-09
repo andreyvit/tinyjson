@@ -392,12 +392,23 @@ func (raw *Raw) Null() bool {
 	return false
 }
 
-func (raw *Raw) Str() string    { return raw.Next().Str() }    // Str returns .Next().Str()
-func (raw *Raw) Int() int       { return raw.Next().Int() }    // Int returns .Next().Int()
-func (raw *Raw) Int64() int64   { return raw.Next().Int64() }  // Int64 returns .Next().Int64()
-func (raw *Raw) Uint64() uint64 { return raw.Next().Uint64() } // Uint64 returns .Next().Uint64()
-func (raw *Raw) Float() float64 { return raw.Next().Float() }  // Float returns .Next().Float()
-func (raw *Raw) Bool() bool     { return raw.Next().Bool() }   // Bool returns .Next().Bool()
+// Str returns .Next().Str(), i.e. parses and returns the next string value or panics if impossible; see [Token.Str] for details.
+func (raw *Raw) Str() string { return raw.Next().Str() }
+
+// Int returns .Next().Int(), i.e. parses and returns the next JSON number as an int value or panics if impossible; see [Token.Int].
+func (raw *Raw) Int() int { return raw.Next().Int() }
+
+// Int64 returns .Next().Int64(), i.e. parses and returns the next JSON number as an int64 value or panics if impossible; see [Token.Int64].
+func (raw *Raw) Int64() int64 { return raw.Next().Int64() }
+
+// Uint64 returns .Next().Uint64(), i.e. parses and returns the next JSON number as an uint64 value or panics if impossible; see [Token.Uint64].
+func (raw *Raw) Uint64() uint64 { return raw.Next().Uint64() }
+
+// Float returns .Next().Float(), i.e. parses and returns the next JSON number as a float64 value or panics if impossible; see [Token.Float].
+func (raw *Raw) Float() float64 { return raw.Next().Float() }
+
+// Bool returns .Next().Bool(), i.e. parses and returns the next JSON boolean value, or panics if impossible; see [Token.Bool].
+func (raw *Raw) Bool() bool { return raw.Next().Bool() }
 
 // Value returns the next JSON value; arrays are returned as []any, objects as map[string]any.
 func (raw *Raw) Value() any {
