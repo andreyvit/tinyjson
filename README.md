@@ -10,6 +10,7 @@ Use this in place of `encoding/json` or `github.com/json-iterator/tinygo` to avo
 * The input is `[]byte`, avoiding all the complexities with partial inputs
 * Token type is just `[]byte` slice of the input
 * All returned strings are also slices of the input (via `unsafe.String`), except for strings that require processing of escape sequences
+* Assume valid JSON on input, panics if not
 * Blazing-fast
 
 
