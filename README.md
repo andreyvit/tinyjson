@@ -86,6 +86,15 @@ We recommend [modd](https://github.com/cortesi/modd) (`go install github.com/cor
 
 Maintain 100% coverage. It's not often the right choice, but it is for this library.
 
+Run tests on both 64-bit and 32-bit targets. On an amd64 host that can run 32-bit executables:
+
+```sh
+go test -vet=all -cover ./...
+GOARCH=386 go test -vet=all -cover ./...
+```
+
+`Int64` and `Uint64` must accept their full 64-bit ranges on every target, including TinyGo WASM. `Int` uses the platform's native integer width.
+
 
 BSD 2-Clause license
 --------------------

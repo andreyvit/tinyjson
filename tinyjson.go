@@ -120,20 +120,20 @@ func (t Token) Int() int {
 	panic("unexpected JSON: " + t.Raw())
 }
 
-// Int returns an int64 value corresponding to this token, panics if impossible.
+// Int64 returns an int64 value corresponding to this token, panics if impossible.
 func (t Token) Int64() int64 {
 	if t.Kind() == Number {
-		if v, err := strconv.ParseInt(t.Raw(), 10, 0); err == nil {
+		if v, err := strconv.ParseInt(t.Raw(), 10, 64); err == nil {
 			return v
 		}
 	}
 	panic("unexpected JSON: " + t.Raw())
 }
 
-// Int returns an uint64 value corresponding to this token, panics if impossible.
+// Uint64 returns a uint64 value corresponding to this token, panics if impossible.
 func (t Token) Uint64() uint64 {
 	if t.Kind() == Number {
-		if v, err := strconv.ParseUint(t.Raw(), 10, 0); err == nil {
+		if v, err := strconv.ParseUint(t.Raw(), 10, 64); err == nil {
 			return v
 		}
 	}

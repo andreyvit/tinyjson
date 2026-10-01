@@ -106,6 +106,10 @@ func TestInt64(t *testing.T) {
 		{`positive number`, Token("123"), 123},
 		{`negative number`, Token("-456"), -456},
 		{`zero`, Token("0"), 0},
+		{`int32 max`, Token("2147483647"), 2147483647},
+		{`above int32 max`, Token("2147483648"), 2147483648},
+		{`below int32 min`, Token("-2147483649"), -2147483649},
+		{`2500 threshold`, Token("2500000000"), 2500000000},
 		{`int64 max`, Token("9223372036854775807"), 9223372036854775807},
 		{`int64 min`, Token("-9223372036854775808"), -9223372036854775808},
 	}
@@ -116,6 +120,12 @@ func TestInt64(t *testing.T) {
 			if actual != test.expected {
 				t.Errorf("** Token.Int64(%v) = %d, wanted %d", test.token, actual, test.expected)
 			}
+
+			raw := Raw(test.token)
+			if actual := raw.Int64(); actual != test.expected {
+				t.Errorf("** Raw.Int64(%v) = %d, wanted %d", test.token, actual, test.expected)
+			}
+			raw.EnsureEOF()
 		})
 	}
 }
@@ -128,6 +138,8 @@ func TestUint64(t *testing.T) {
 	}{
 		{`zero`, Token("0"), 0},
 		{`positive number`, Token("123"), 123},
+		{`uint32 max`, Token("4294967295"), 4294967295},
+		{`above uint32 max`, Token("4294967296"), 4294967296},
 		{`max uint64`, Token("18446744073709551615"), 18446744073709551615},
 	}
 
@@ -137,6 +149,12 @@ func TestUint64(t *testing.T) {
 			if actual != test.expected {
 				t.Errorf("** Token.Uint64(%v) = %d, wanted %d", test.token, actual, test.expected)
 			}
+
+			raw := Raw(test.token)
+			if actual := raw.Uint64(); actual != test.expected {
+				t.Errorf("** Raw.Uint64(%v) = %d, wanted %d", test.token, actual, test.expected)
+			}
+			raw.EnsureEOF()
 		})
 	}
 }
@@ -272,6 +290,10 @@ func TestPanics(t *testing.T) {
 		{`string cannot Int`, func() { raw(`"42"`).Int() }, `unexpected JSON: "42"`},
 		{`string cannot Int64`, func() { raw(`"42"`).Int64() }, `unexpected JSON: "42"`},
 		{`string cannot Uint64`, func() { raw(`"42"`).Uint64() }, `unexpected JSON: "42"`},
+		{`Int64 overflow`, func() { raw(`9223372036854775808`).Int64() }, "unexpected JSON: 9223372036854775808"},
+		{`Int64 underflow`, func() { raw(`-9223372036854775809`).Int64() }, "unexpected JSON: -9223372036854775809"},
+		{`Uint64 overflow`, func() { raw(`18446744073709551616`).Uint64() }, "unexpected JSON: 18446744073709551616"},
+		{`negative cannot Uint64`, func() { raw(`-1`).Uint64() }, "unexpected JSON: -1"},
 		{`string cannot StartObject`, func() { raw(`"42"`).StartObject() }, `unexpected JSON: "42"`},
 		{`string cannot StartArray`, func() { raw(`"42"`).StartArray() }, `unexpected JSON: "42"`},
 
