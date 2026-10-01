@@ -243,7 +243,7 @@ func unquoteString(s []byte) string {
 	s = s[1 : n-1]
 	n -= 2
 	if !hasEscape(s) {
-		return unsafe.String(&s[0], len(s))
+		return unsafe.String(unsafe.SliceData(s), len(s))
 	}
 	var buf strings.Builder
 	buf.Grow(len(s))

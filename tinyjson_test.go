@@ -69,6 +69,7 @@ func TestStr(t *testing.T) {
 		expected string
 	}{
 		{`string token`, Token(`"hello"`), "hello"},
+		{`empty string`, Token(`""`), ""},
 		{`escape double quote`, Token(`"\""`), `"`},
 		{`escape backslash`, Token(`"\\"`), `\`},
 		{`escape forward slash`, Token(`"\/"`), "/"},
@@ -215,6 +216,8 @@ func TestValue(t *testing.T) {
 		{`float`, `3.14`, 3.14},
 		{`scientific notation`, `6.022e23`, 6.022e23},
 		{`string`, `"Hello, World!"`, "Hello, World!"},
+		{`empty string`, `""`, ""},
+		{`empty object key and value`, `{"":""}`, map[string]any{"": ""}},
 		{`array`, `[1, "two", 3.0, true, null]`, []any{1.0, "two", 3.0, true, nil}},
 		{`object`, `{"name":"John", "age":30, "city":"New York"}`, map[string]any{"name": "John", "age": 30.0, "city": "New York"}},
 		{`nested object`, `{"person":{"name":"John", "age":30}, "city":"New York"}`, map[string]any{"person": map[string]any{"name": "John", "age": 30.0}, "city": "New York"}},
